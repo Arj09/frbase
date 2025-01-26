@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import  BookDataService  from "../Component/service"
+import  BookDataService  from "./Controller/service"
 import { updateDoc } from "firebase/firestore";
 
 

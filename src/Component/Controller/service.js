@@ -1,4 +1,4 @@
-import { db } from "../Component/firebae-config"
+import { db } from "../firebae-config"
 import { collection, addDoc, updateDoc, deleteDoc, getDoc, getDocs , doc }  from "firebase/firestore"
 
 
