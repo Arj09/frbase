@@ -1,0 +1,373 @@
+import React, {useEffect, useState} from "react";
+import ItemDataService from "../Component/Controller/item"
+import CategoryDataService  from "../Component/Controller/category"
+import TypeDataService from "../Component/Controller/type"
+import category from "../Component/Controller/category";
+
+
+
+
+
+
+export const Offer = () =>{
+
+    const [cate, setcate] = useState()
+    
+    const [Type, setType] = useState()
+    const [AddCate, setAddCate] = useState({})
+    const [AddType, setAddType] = useState({})
+    const [type, settype]= useState("All")
+    const [show, setShow] = useState(true)
+    const [item, setItem] = useState({})
+    const [change, setChange] = useState(0)
+    const [data, setData] = useState()
+    const [CategoryS, setCategoryS] = useState("All")
+    const [TypeS, setTypeS] = useState("All")
+    const [message, setMessage] = useState({ error: false, msg: "" });
+    const [security, setSecurity] = useState(false)
+    const [password, setPassword] = useState("Arjun")
+    const [open, setOpen] = useState(true)
+    const [valid, setValid ] = useState('')
+    const [EditW, setEdit] = useState(false)
+    const [updateItem, setUpdate] = useState({})
+    const [itemID, setItemID] = useState()
+    
+
+
+
+
+    useEffect(()=>{
+        
+        getCategory()
+        getItems()
+        getType()
+        
+
+    },[change])
+    
+    console.log(cate)
+
+
+
+
+
+
+    const getItems = async()=>{
+        const data = await ItemDataService.getAllItem()
+        console.log(data.docs)
+        setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        console.log(item)
+    }
+
+    const getCategory = async()=>{
+        const data = await CategoryDataService.getAllCategory()
+        console.log(data.docs)
+        setcate(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        console.log(cate)
+    }
+
+    const getType = async()=>{
+        const data = await TypeDataService.getAllType()
+        console.log(data.docs)
+        setType(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        console.log(type)
+    }
+
+    const handleType = (e) =>{
+        const name = e.target.name
+        const value = e.target.value
+        setAddType(AddType=>({...AddType, [name]:value}))
+    }
+
+    const handleupdateItem = (e) =>{
+        const name = e.target.name
+        const value = e.target.value
+        setUpdate(updateItem=>({...updateItem, [name]:value}))
+    }
+
+
+    const handleCategory = (e) =>{
+        const name = e.target.name
+        const value = e.target.value
+        setAddCate(AddCate=>({...AddCate, [name]:value}))
+    }
+
+
+    const handleItem = (e) =>{
+        const name = e.target.name
+        const value = e.target.value
+        setItem(item=>({...item, [name]:value}))
+    }
+
+    const handleAddItem = async(e)=>{
+        e.preventDefault();
+        try{
+            await ItemDataService.addItems(item)
+            setChange(change=>change+1)
+            setItem({name:'', price:"", mrp:"", category:"", type:"", quantity:""})
+        }
+        catch(err){
+            setMessage({ error: true, msg: err.message})
+        }
+
+    }
+
+
+    const handleAddCategory = async(e) =>{
+        console.log("print, addcate", AddCate)
+        e.preventDefault()
+        console.log("entry")
+        try{
+            console.log("start")
+            await CategoryDataService.addCategory(AddCate);
+            console.log("Add")
+            setChange(change=>change+1)
+            setAddCate({name:''})
+            }
+            catch (err) {
+                console.log(err)
+                setMessage({ error: true, msg: err.message }); 
+            }
+        }
+
+    
+
+    const handleAddType = async(e)=>{
+        e.preventDefault()
+        try{
+            await TypeDataService.addType(AddType)
+            setChange(change=>change+1)
+            setAddType({name:'', category:''})
+            
+            
+        }catch(err){
+            setMessage({ error: true, msg: err.message }); 
+
+        }
+
+    }
+
+
+    const handleChangeCate = (data)=>{
+        setTypeS("All")
+        setCategoryS(data)
+        
+
+    }
+
+    const handleChangeType = ()=>{
+        setTypeS(data)
+    }
+
+    const handleSearchType = (data)=>{
+        setTypeS(data)
+
+    }
+
+
+    const handleSec = ()=>{
+        security ? setSecurity(false) :setSecurity(true)
+    }
+
+    const handleCheck = (e)=>{
+        e.preventDefault()
+        if(valid == password){
+            setOpen(true)
+            setValid("")
+        }
+
+    }
+
+    const handleUpdateItemDetail = async(e)=>{
+        e.preventDefault()
+        try{
+
+            await ItemDataService.updateItem(itemID, updateItem)
+            setChange(change=>change+1)
+            setUpdate({name:""})
+        }catch (err) {
+            setMessage({ error: true, msg: err.message }); 
+            console.log(err.message)
+
+            }
+
+
+    }
+
+
+    const handleEdit = (index,name)=>{
+        EditW ? setEdit(false) : setEdit(true)
+        setItemID(index)
+        setUpdate({name:name})
+
+    }
+
+
+    const handleDelete =async(index)=>{
+        await ItemDataService.deleteItem(index)
+        setChange(change=>change+1)
+    }
+
+    return(
+        <>
+
+        <div className=" w-5/5 bg-red-500 flex flex-row justify-between p-4 text-white">
+            <text className=" text-3xl">MiniMart</text>
+            <text className=" text-xl cursor-pointer" onClick={handleSec}>Add</text>
+        </div>
+
+        {
+            security && <form onSubmit={handleCheck} className=" flex flex-row p-2 gap-2 w-4/5 mx-auto ">
+                <input className=" border-2 w-5/5 pl-2  rounded py-1 " name="password" value={valid} onChange={(e)=>setValid(e.target.value)}/>
+                <button className=" border-2 px-2 py-0.5 rounded">Check</button>
+            </form>
+        }
+        
+        
+
+
+        
+
+        <div className=" border-none p-2 w-4/5 mx-auto my-2 rounded bg-red-500 grid grid-cols-4 grid-flow-row gap-2">
+            {
+                cate?.map((data, index)=>{
+                    return(
+                        <text className=" border-2 border-white text-center py-1 cursor-pointer rounded text-white" onClick={()=>handleChangeCate(data.name)}>{data.name}</text>
+                    )
+                })
+            }
+
+        </div>
+
+
+        {
+            EditW && <form onSubmit={handleUpdateItemDetail} className=" mx-auto flex flex-col gap-2 rounded w-4/5 border-2 p-4">
+                <text className=" text-end px-2">x</text>
+                <text className=" text-center bg-red-500 py-1.5 text-white rounded">Update Item Detail</text>
+                <input placeholder=" Enter update name" className=" border-2 py-1 rounded pl-2" name="name" value={updateItem.name} onChange={handleupdateItem}/>
+                <button className=" border-none text-white rounded py-1 bg-red-500 ">Update</button>
+            </form>
+        }
+
+        <div className=" flex flex-row border-2 border-red-500  w-4/5 mx-auto my-4 gap-1 p-2 rounded ">
+            <div className=" border-none  w-1/5 flex flex-col   rounded bg-red-500 p-2">
+
+                {
+                    Type?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
+                    .map((data, index)=>{
+                        return(
+                            <text className=" text-white cursor-pointer p-2 hover:rounded hover:bg-white hover:text-red-500" onClick={()=>handleSearchType(data.name)}>{data.name}</text>
+                        )
+                    })
+                }
+
+
+            </div>
+            <div className=" border-none  w-4/5 grid grid-cols-5 grid-flow-row gap-x-2 gap-y-2  rounded bg-red-500 p-2 text-white">
+                {
+                    data?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
+                    .filter((data)=>TypeS == "All" ? data : data.type == TypeS)
+                    .map((data, index)=>{
+                        return(
+                            <div className=" flex flex-col border-2 p-2 w-5/5 rounded ">
+                                <text>{data.name}</text>
+                                <text className=" text-sm">{`Qty. ${data.quantity}`}</text>
+                                <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
+                                {
+                                    open && <div className=" flex flex-row justify-between w-5/5 p-2">
+                                                <button className=" border-2 py-0.5 rounded px-2"onClick={()=>handleEdit(data.id, data.name)}>Edit</button>
+                                                <button className=" border-2 py-0.5 rounded px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
+                                            </div>
+                                }
+
+                                
+                            </div>
+                        )
+                    })
+                }
+            
+            
+            
+            </div>
+
+        </div>
+        
+
+        {
+            open && (
+                <form onSubmit={handleAddItem} className=" w-4/5 border-2 p-2 flex flex-col mx-auto gap-2 rounded">
+                    <text className=" text-center py-4 bg-red-500 rounded text-white"> Item Adding Page</text>
+                    <input placeholder=" Enter Item name" className=" w-full pl-2 py-1 border-2 rounded" name="name" value={item.name} onChange={handleItem} />
+                    <input placeholder=" Enter Item Quanity" className=" w-full pl-2 py-1 border-2 rounded" name="quantity" value={item.quantity} onChange={handleItem}/>
+                    <input placeholder=" Enter Item Price" className=" w-full pl-2 py-1 border-2 rounded" name=" price" value={item.price} onChange={handleItem}/>
+                    <input placeholder=" Enter Item MRP" className=" w-full pl-2 py-1 border-2 rounded" name="mrp" value={item.mrp} onChange={handleItem}/>
+                    
+                    <select className=" border-2 py-1 rounded" name="category" value={item.category} onChange={handleItem} >
+                        {
+                            cate?.map((data, index)=>{
+                                return(
+                                    <option >{data.name}</option>
+                                )
+                            })
+                        }
+                    </select>
+
+                    <select className=" border-2 py-1 rounded" name="type" value={item.type} onChange={handleItem} >
+                        {
+                            Type?.map((data, index)=>{
+                                return(
+                                    <option >{data.name}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    
+                    <button className="bg-red-500 py-2 rounded text-white">Add Item</button>
+
+                </form>
+            )
+        }
+
+        {
+            open  && (
+                <form onSubmit={handleAddType} className=" w-4/5 border-2 p-2 flex flex-col mx-auto gap-2 my-2 rounded">
+                    <text className=" text-center py-4 bg-red-500 rounded text-white"> Adding Item Type </text>
+                    <input placeholder=" Enter Item name" className=" w-full pl-2 py-1 border-2 rounded" name="name"  value={AddType.name} onChange={handleType} />
+                    <select className=" border-2 py-1 rounded" name="category" value={AddType.category} onChange={handleType} >
+                        {
+                            cate?.map((data, index)=>{
+                                return(
+                                    <option >{data.name}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    
+                    <button className="bg-red-500 py-2 rounded text-white">Add Item</button>
+
+                </form>
+            )
+        }
+
+
+
+
+        {
+            open  && (
+                <form onSubmit={handleAddCategory} className=" w-4/5 border-2 p-2 flex flex-col mx-auto gap-2 rounded my-2">
+                    <text className=" text-center py-4 bg-red-500 rounded text-white">Adding Category</text>
+                    <input placeholder=" Enter Item name" className=" w-full pl-2 py-1 border-2 rounded" name="name"  value={AddCate.name} onChange={handleCategory} />
+                    <button className="bg-red-500 py-2 rounded text-white">Add Item</button>
+
+                </form>
+            )
+        }
+
+
+
+
+
+        
+        </>
+    )
+}

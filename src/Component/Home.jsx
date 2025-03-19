@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import  BookDataService  from "./Controller/service"
 import { updateDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -17,6 +18,7 @@ export const Home = ()=>{
     const [message, setMessage] = useState({ error: false, msg: "" });
     const [books, setBooks] = useState([])
     const [show, setShow] = useState(false)
+    const navigate = useNavigate()
 
 
 
@@ -133,7 +135,10 @@ export const Home = ()=>{
             
 
            
+            <div className=" mx-auto my-10 border-2 w-4/5 rounded p-2">
+                <button className=" rounded px-2 py-1 text-white bg-red-500 " onClick={()=>navigate("/Profile")}> Profile</button>
 
+            </div>
             <div className="  w-4/5 flex flex-col gap-y-2 mx-auto rounded my-10">
             
             {
@@ -146,7 +151,7 @@ export const Home = ()=>{
                             <text>{doc.status}</text>
                             <div className=" flex flex-row gap-x-4 ">
                                 <button className=" bg-blue-500 text-white px-4 py-1.5 rounded " onClick={(e) => editHandler(doc.id, doc.title, doc.author,)}>Edit</button> 
-                                <button className=" bg-blue-500 text-white px-4 py-1.5 rounded  " onClick={e=>deleteHandler(doc.id)}>Delete</button>                            
+                                <button className=" bg-blue-500 text-white px-4 py-1.5 rounded  " onClick={(e)=>deleteHandler(doc.id)}>Delete</button>                            
                             </div>
                         </div>
                     )
