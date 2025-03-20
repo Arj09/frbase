@@ -283,7 +283,7 @@ export const Offer = () =>{
                                 {
                                     open && <div className=" flex flex-row justify-between  w-5/5 mt-1.5">
                                                 <button className=" border-2 py-0.5 rounded px-1 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp)}>Edit</button>
-                                                <button className=" border-2 py-0.5 rounded px-0.8 md:px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
+                                                <button className=" border-2 py-0.5 rounded px-1 md:px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
                                             </div>
                                 }
 
