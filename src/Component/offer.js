@@ -232,11 +232,11 @@ export const Offer = () =>{
 
         
 
-        <div className="  border-none p-2 w-11/12 md:w-4/5 mx-auto my-2 rounded bg-red-500 grid grid-cols-4 grid-flow-row gap-2">
+        <div className="  border-none p-2 w-5/5 md:w-4/5 mx-auto my-2 rounded bg-red-500 grid grid-flow-row grid-cols-2  md:grid-cols-4 md:grid-flow-row gap-2">
             {
                 cate?.map((data, index)=>{
                     return(
-                        <text className=" border-2 border-white text-center py-1 cursor-pointer rounded text-white" onClick={()=>handleChangeCate(data.name)}>{data.name}</text>
+                        <text className=" border-2 border-white text-center p-1 cursor-pointer rounded text-white" onClick={()=>handleChangeCate(data.name)}>{data.name}</text>
                     )
                 })
             }
@@ -252,7 +252,7 @@ export const Offer = () =>{
                 <button className=" border-none text-white rounded py-1 bg-red-500 ">Update</button>
             </form>
         }
-
+        <text className=" w-11/12 md:w-4/5 flex flex-row mx-auto px-3">{`Result for ${CategoryS} category `}</text>
         <div className=" flex flex-row border-none sm:border-2 border-red-500  w-5/5 md:w-4/5 mx-auto my-4 gap-1 p-2 rounded ">
             <div className=" border-none  w-1/5 flex flex-col   rounded bg-red-500 p-2">
 
@@ -267,6 +267,7 @@ export const Offer = () =>{
 
 
             </div>
+            
             <div className=" grid grid-flow-row sm:grid-cols-3  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 w-4/5 bg-red-500 text-white rounded gap-2 p-2">
                 {
                     data?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
