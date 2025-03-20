@@ -26,7 +26,7 @@ export const Offer = () =>{
     const [message, setMessage] = useState({ error: false, msg: "" });
     const [security, setSecurity] = useState(false)
     const [password, setPassword] = useState("Arjun")
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
     const [valid, setValid ] = useState('')
     const [EditW, setEdit] = useState(false)
     const [updateItem, setUpdate] = useState({})
@@ -260,7 +260,7 @@ export const Offer = () =>{
                     Type?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
                     .map((data, index)=>{
                         return(
-                            <text className=" text-white cursor-pointer p-2 hover:rounded hover:bg-white hover:text-red-500" onClick={()=>handleSearchType(data.name)}>{data.name}</text>
+                            <text className=" text-white cursor-pointer p-1 hover:rounded hover:bg-white hover:text-red-500" onClick={()=>handleSearchType(data.name)}>{data.name}</text>
                         )
                     })
                 }
@@ -274,12 +274,12 @@ export const Offer = () =>{
                     .filter((data)=>TypeS == "All" ? data : data.type == TypeS)
                     .map((data, index)=>{
                         return(
-                            <div className={`${open ? 'h-[130px]': 'h-[130px] '} flex flex-col  border-2 p-2 w-5/5 rounded `}>
+                            <div className={`${open ? 'h-[150px]': 'h-[130px]  '} ${open ? 'p-1': 'p-2  '} flex flex-col  border-2 p-2 w-5/5 rounded `}>
                                 <text>{data.name}</text>
                                 <text className=" text-sm">{`Qty. ${data.quantity}`}</text>
                                 <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
                                 {
-                                    open && <div className=" flex flex-row justify-between gap-x-2 w-5/5 mt-1.5">
+                                    open && <div className=" flex flex-row justify-between gap-x-1 w-5/5 mt-1.5">
                                                 <button className=" border-2 py-0.5 rounded px-2"onClick={()=>handleEdit(data.id, data.name)}>Edit</button>
                                                 <button className=" border-2 py-0.5 rounded px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
                                             </div>
