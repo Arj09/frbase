@@ -26,7 +26,7 @@ export const Offer = () =>{
     const [message, setMessage] = useState({ error: false, msg: "" });
     const [security, setSecurity] = useState(false)
     const [password, setPassword] = useState("Arjun")
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const [valid, setValid ] = useState('')
     const [EditW, setEdit] = useState(false)
     const [updateItem, setUpdate] = useState({})
@@ -196,9 +196,13 @@ export const Offer = () =>{
 
 
     const handleEdit = (index,name)=>{
+
+        if(index || name){
+            EditW ? setEdit(false) : setEdit(true)
+            setItemID(index)
+            setUpdate({name:name})
+        }
         EditW ? setEdit(false) : setEdit(true)
-        setItemID(index)
-        setUpdate({name:name})
 
     }
 
@@ -228,7 +232,7 @@ export const Offer = () =>{
 
         
 
-        <div className=" border-none p-2 w-4/5 mx-auto my-2 rounded bg-red-500 grid grid-cols-4 grid-flow-row gap-2">
+        <div className="  border-none p-2 w-11/12 md:w-4/5 mx-auto my-2 rounded bg-red-500 grid grid-cols-4 grid-flow-row gap-2">
             {
                 cate?.map((data, index)=>{
                     return(
@@ -242,14 +246,14 @@ export const Offer = () =>{
 
         {
             EditW && <form onSubmit={handleUpdateItemDetail} className=" mx-auto flex flex-col gap-2 rounded w-4/5 border-2 p-4">
-                <text className=" text-end px-2">x</text>
+                <text className=" text-end px-2 cursor-pointer" onClick={handleEdit}>x</text>
                 <text className=" text-center bg-red-500 py-1.5 text-white rounded">Update Item Detail</text>
                 <input placeholder=" Enter update name" className=" border-2 py-1 rounded pl-2" name="name" value={updateItem.name} onChange={handleupdateItem}/>
                 <button className=" border-none text-white rounded py-1 bg-red-500 ">Update</button>
             </form>
         }
 
-        <div className=" flex flex-row border-2 border-red-500  w-4/5 mx-auto my-4 gap-1 p-2 rounded ">
+        <div className=" flex flex-row border-none sm:border-2 border-red-500  w-5/5 md:w-4/5 mx-auto my-4 gap-1 p-2 rounded ">
             <div className=" border-none  w-1/5 flex flex-col   rounded bg-red-500 p-2">
 
                 {
@@ -263,18 +267,18 @@ export const Offer = () =>{
 
 
             </div>
-            <div className=" border-none  w-4/5 grid grid-cols-5 grid-flow-row gap-x-2 gap-y-2  rounded bg-red-500 p-2 text-white">
+            <div className=" grid grid-flow-row sm:grid-cols-3  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 w-4/5 bg-red-500 text-white rounded gap-2 p-2">
                 {
                     data?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
                     .filter((data)=>TypeS == "All" ? data : data.type == TypeS)
                     .map((data, index)=>{
                         return(
-                            <div className=" flex flex-col border-2 p-2 w-5/5 rounded ">
+                            <div className={`${open ? 'h-[130px]': 'h-[130px] '} flex flex-col  border-2 p-2 w-5/5 rounded `}>
                                 <text>{data.name}</text>
                                 <text className=" text-sm">{`Qty. ${data.quantity}`}</text>
                                 <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
                                 {
-                                    open && <div className=" flex flex-row justify-between w-5/5 p-2">
+                                    open && <div className=" flex flex-row justify-between gap-x-2 w-5/5 mt-1.5">
                                                 <button className=" border-2 py-0.5 rounded px-2"onClick={()=>handleEdit(data.id, data.name)}>Edit</button>
                                                 <button className=" border-2 py-0.5 rounded px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
                                             </div>
