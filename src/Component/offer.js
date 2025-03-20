@@ -26,7 +26,7 @@ export const Offer = () =>{
     const [message, setMessage] = useState({ error: false, msg: "" });
     const [security, setSecurity] = useState(false)
     const [password, setPassword] = useState("Arjun")
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
     const [valid, setValid ] = useState('')
     const [EditW, setEdit] = useState(false)
     const [updateItem, setUpdate] = useState({})
@@ -184,7 +184,7 @@ export const Offer = () =>{
 
             await ItemDataService.updateItem(itemID, updateItem)
             setChange(change=>change+1)
-            setUpdate({name:""})
+            setUpdate({name:"", quantity:"", mrp:""})
         }catch (err) {
             setMessage({ error: true, msg: err.message }); 
             console.log(err.message)
@@ -195,12 +195,12 @@ export const Offer = () =>{
     }
 
 
-    const handleEdit = (index,name)=>{
+    const handleEdit = (index,name, quantity,mrp)=>{
 
         if(index || name){
             EditW ? setEdit(false) : setEdit(true)
             setItemID(index)
-            setUpdate({name:name})
+            setUpdate({name:name, quantity:quantity, mrp:mrp})
         }
         EditW ? setEdit(false) : setEdit(true)
 
@@ -249,6 +249,8 @@ export const Offer = () =>{
                 <text className=" text-end px-2 cursor-pointer" onClick={handleEdit}>x</text>
                 <text className=" text-center bg-red-500 py-1.5 text-white rounded">Update Item Detail</text>
                 <input placeholder=" Enter update name" className=" border-2 py-1 rounded pl-2" name="name" value={updateItem.name} onChange={handleupdateItem}/>
+                <input placeholder=" Enter update quantity" className=" border-2 py-1 rounded pl-2" name="quantity" value={updateItem.quantity} onChange={handleupdateItem}/>
+                <input placeholder=" Enter update mrp" className=" border-2 py-1 rounded pl-2" name="mrp" value={updateItem.mrp} onChange={handleupdateItem}/>
                 <button className=" border-none text-white rounded py-1 bg-red-500 ">Update</button>
             </form>
         }
@@ -280,7 +282,7 @@ export const Offer = () =>{
                                 <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
                                 {
                                     open && <div className=" flex flex-row justify-between  w-5/5 mt-1.5">
-                                                <button className=" border-2 py-0.5 rounded px-0.9 md:px-2"onClick={()=>handleEdit(data.id, data.name)}>Edit</button>
+                                                <button className=" border-2 py-0.5 rounded px-0.9 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp)}>Edit</button>
                                                 <button className=" border-2 py-0.5 rounded px-0.5 md:px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
                                             </div>
                                 }
