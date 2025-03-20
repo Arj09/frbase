@@ -185,6 +185,7 @@ export const Offer = () =>{
             await ItemDataService.updateItem(itemID, updateItem)
             setChange(change=>change+1)
             setUpdate({name:"", quantity:"", mrp:""})
+            setEdit(false)
         }catch (err) {
             setMessage({ error: true, msg: err.message }); 
             console.log(err.message)
