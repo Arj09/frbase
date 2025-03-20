@@ -26,7 +26,7 @@ export const Offer = () =>{
     const [message, setMessage] = useState({ error: false, msg: "" });
     const [security, setSecurity] = useState(false)
     const [password, setPassword] = useState("Arjun")
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const [valid, setValid ] = useState('')
     const [EditW, setEdit] = useState(false)
     const [updateItem, setUpdate] = useState({})
@@ -282,8 +282,8 @@ export const Offer = () =>{
                                 <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
                                 {
                                     open && <div className=" flex flex-row justify-between  w-5/5 mt-1.5">
-                                                <button className=" border-2 py-0.5 rounded px-0.9 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp)}>Edit</button>
-                                                <button className=" border-2 py-0.5 rounded px-0.5 md:px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
+                                                <button className=" border-2 py-0.5 rounded px-1 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp)}>Edit</button>
+                                                <button className=" border-2 py-0.5 rounded px-0.8 md:px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
                                             </div>
                                 }
 
