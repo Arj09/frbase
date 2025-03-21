@@ -31,6 +31,7 @@ export const Offer = () =>{
     const [EditW, setEdit] = useState(false)
     const [updateItem, setUpdate] = useState({})
     const [itemID, setItemID] = useState()
+    const [search, setSearch] = useState("All")
     
 
 
@@ -45,7 +46,7 @@ export const Offer = () =>{
 
     },[change])
     
-    console.log(cate)
+    
 
 
 
@@ -54,23 +55,21 @@ export const Offer = () =>{
 
     const getItems = async()=>{
         const data = await ItemDataService.getAllItem()
-        console.log(data.docs.reverse())
+        data.docs.reverse()
         setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-        console.log(item)
+        
     }
 
     const getCategory = async()=>{
         const data = await CategoryDataService.getAllCategory()
-        console.log(data.docs)
         setcate(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-        console.log(cate)
+       
     }
 
     const getType = async()=>{
         const data = await TypeDataService.getAllType()
-        console.log(data.docs)
         setType(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-        console.log(type)
+       
     }
 
     const handleType = (e) =>{
@@ -114,18 +113,18 @@ export const Offer = () =>{
 
 
     const handleAddCategory = async(e) =>{
-        console.log("print, addcate", AddCate)
+        
         e.preventDefault()
-        console.log("entry")
+       
         try{
-            console.log("start")
+           
             await CategoryDataService.addCategory(AddCate);
-            console.log("Add")
+           
             setChange(change=>change+1)
             setAddCate({name:''})
             }
             catch (err) {
-                console.log(err)
+                
                 setMessage({ error: true, msg: err.message }); 
             }
         }
@@ -188,7 +187,7 @@ export const Offer = () =>{
             setEdit(false)
         }catch (err) {
             setMessage({ error: true, msg: err.message }); 
-            console.log(err.message)
+            
 
             }
 
@@ -196,12 +195,12 @@ export const Offer = () =>{
     }
 
 
-    const handleEdit = (index,name, quantity,mrp)=>{
+    const handleEdit = (index,name, quantity,mrp, price)=>{
 
         if(index || name){
             EditW ? setEdit(false) : setEdit(true)
             setItemID(index)
-            setUpdate({name:name, quantity:quantity, mrp:mrp})
+            setUpdate({name:name, quantity:quantity, mrp:mrp, price:price})
         }
         EditW ? setEdit(false) : setEdit(true)
 
@@ -213,6 +212,8 @@ export const Offer = () =>{
         setChange(change=>change+1)
     }
 
+
+   
     return(
         <>
 
@@ -233,11 +234,11 @@ export const Offer = () =>{
 
         
 
-        <div className="  border-none p-2 w-5/5 md:w-4/5 mx-auto my-2 rounded bg-red-500 grid grid-flow-row grid-cols-2  md:grid-cols-4 md:grid-flow-row gap-2">
+        <div className="  border-none p-2 w-5/5 md:w-4/5 mx-auto my-2 rounded  grid grid-flow-row grid-cols-2  md:grid-cols-4 md:grid-flow-row gap-2">
             {
                 cate?.map((data, index)=>{
                     return(
-                        <text className=" border-2 border-white text-center p-1 cursor-pointer rounded text-white" onClick={()=>handleChangeCate(data.name)}>{data.name}</text>
+                        <text key={index} className=" border-none bg-red-500 text-center p-1 cursor-pointer rounded text-white" onClick={()=>handleChangeCate(data.name)}>{data.name}</text>
                     )
                 })
             }
@@ -252,6 +253,7 @@ export const Offer = () =>{
                 <input placeholder=" Enter update name" className=" border-2 py-1 rounded pl-2" name="name" value={updateItem.name} onChange={handleupdateItem}/>
                 <input placeholder=" Enter update quantity" className=" border-2 py-1 rounded pl-2" name="quantity" value={updateItem.quantity} onChange={handleupdateItem}/>
                 <input placeholder=" Enter update mrp" className=" border-2 py-1 rounded pl-2" name="mrp" value={updateItem.mrp} onChange={handleupdateItem}/>
+                <input placeholder=" Enter update price" className=" border-2 py-1 rounded pl-2" name="price" value={updateItem.price} onChange={handleupdateItem}/>
                 <button className=" border-none text-white rounded py-1 bg-red-500 ">Update</button>
             </form>
         }
@@ -263,7 +265,7 @@ export const Offer = () =>{
                     Type?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
                     .map((data, index)=>{
                         return(
-                            <text className=" text-white cursor-pointer p-1 hover:rounded hover:bg-white hover:text-red-500" onClick={()=>handleSearchType(data.name)}>{data.name}</text>
+                            <text key={index} className=" text-white cursor-pointer p-1 hover:rounded hover:bg-white hover:text-red-500" onClick={()=>handleSearchType(data.name)}>{data.name}</text>
                         )
                     })
                 }
@@ -271,20 +273,21 @@ export const Offer = () =>{
 
             </div>
             
-            <div className=" grid grid-flow-row sm:grid-cols-3  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 w-4/5 bg-red-500 text-white rounded gap-2 p-2">
+            <div className=" grid grid-flow-row sm:grid-cols-3  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 w-4/5 border-2 text-white rounded gap-2 p-2">
                 {
-                    data?.filter((data)=>CategoryS == "All" ? data : data.category == CategoryS)
-                    .filter((data)=>TypeS == "All" ? data : data.type == TypeS)
+                    data?.filter((data)=>CategoryS === "All" ? data : data.category === "Special offer")
+                    .filter((data)=>TypeS === "All" ? data : data.type === TypeS)
                     .map((data, index)=>{
                         return(
-                            <div className={`${open ? 'h-[150px]': 'h-[110px]  '} ${open ? 'p-1': 'p-2  '} flex flex-col  border-2 p-2 w-5/5 rounded `}>
+                            <div key={index} className={`${open ? 'h-[160px]': 'h-[120px]  '} ${open ? 'p-1': 'p-2  '} flex flex-col   p-2 w-5/5 rounded bg-red-500`}>
                                 <text>{data.name}</text>
                                 <text className=" text-sm">{`Qty. ${data.quantity}`}</text>
-                                <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
-                                
+                                {
+                                    data.mrp > data.price ? <p className="">&#x20B9;<text className="  pr-1 line-through">{data.mrp}</text>{data.price}</p> : <p className="">&#x20B9;<text className="">{data.mrp}</text></p>
+                                }
                                 {
                                     open && <div className=" flex flex-row justify-between  w-5/5 mt-1.5">
-                                                <button className=" border-2 py-0.5 rounded px-1 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp)}>Edit</button>
+                                                <button className=" border-2 py-0.5 rounded px-1 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp, data.price)}>Edit</button>
                                                 <button className=" border-2 py-0.5 rounded px-1 md:px-2" onClick={()=>handleDelete(data.id)}>Delete</button>
                                             </div>
                                 }
