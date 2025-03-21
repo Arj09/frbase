@@ -275,7 +275,7 @@ export const Offer = () =>{
             
             <div className=" grid grid-flow-row sm:grid-cols-3  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 w-4/5 border-2 text-white rounded gap-2 p-2">
                 {
-                    data?.filter((data)=>CategoryS === "All" ? data : data.category === "Special offer")
+                    data?.filter((data)=>CategoryS === "All" ? data : data.category === CategoryS)
                     .filter((data)=>TypeS === "All" ? data : data.type === TypeS)
                     .map((data, index)=>{
                         return(
