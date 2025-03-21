@@ -54,7 +54,7 @@ export const Offer = () =>{
 
     const getItems = async()=>{
         const data = await ItemDataService.getAllItem()
-        console.log(data.docs)
+        console.log(data.docs.reverse())
         setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         console.log(item)
     }
@@ -277,10 +277,11 @@ export const Offer = () =>{
                     .filter((data)=>TypeS == "All" ? data : data.type == TypeS)
                     .map((data, index)=>{
                         return(
-                            <div className={`${open ? 'h-[150px]': 'h-[130px]  '} ${open ? 'p-1': 'p-2  '} flex flex-col  border-2 p-2 w-5/5 rounded `}>
+                            <div className={`${open ? 'h-[150px]': 'h-[110px]  '} ${open ? 'p-1': 'p-2  '} flex flex-col  border-2 p-2 w-5/5 rounded `}>
                                 <text>{data.name}</text>
                                 <text className=" text-sm">{`Qty. ${data.quantity}`}</text>
                                 <text className=" text-sm">{`Rs. ${data.mrp}`}</text>
+                                
                                 {
                                     open && <div className=" flex flex-row justify-between  w-5/5 mt-1.5">
                                                 <button className=" border-2 py-0.5 rounded px-1 md:px-2"onClick={()=>handleEdit(data.id, data.name, data.quantity, data.mrp)}>Edit</button>
@@ -322,7 +323,8 @@ export const Offer = () =>{
 
                     <select className=" border-2 py-1 rounded" name="type" value={item.type} onChange={handleItem} >
                         {
-                            Type?.map((data, index)=>{
+                            Type?.filter((data)=> item.category == false ? data : data.category == item.category)
+                            .map((data, index)=>{
                                 return(
                                     <option >{data.name}</option>
                                 )
